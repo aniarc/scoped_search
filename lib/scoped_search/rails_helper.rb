@@ -134,7 +134,7 @@ module ScopedSearch
 				      .append( "<a>" + "<strong class='ui-autocomplete-completed'>" + item.completed + "</strong>" + item.part + "</a>" )
 				      .appendTo( ul );
             } else {
-              self._renderItem( ul, item );
+              self._renderItemData( ul, item );
             }
           });
         }
