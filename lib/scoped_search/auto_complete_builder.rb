@@ -137,15 +137,6 @@ module ScopedSearch
         q.chomp!(quoted[1]) if quoted
       end
 
-      # for doted field names compact the suggestions list to be one suggestion
-      # unless the user has typed the relation name entirely or the suggestion list
-      # is short.
-      if (suggestions.size > 10 && (tokens.empty? || !(tokens.last.to_s.include?('.')) ) && !(is_value))
-        suggestions = suggestions.map {|s|
-          (s.to_s.split('.')[0].end_with?(tokens.last)) ? s.to_s : s.to_s.split('.')[0]
-        }
-      end
-
       suggestions.uniq.map {|m| "#{q} #{m}"}
     end
 
@@ -178,7 +169,7 @@ module ScopedSearch
       field.key_klass.all(opts).map(&field.key_field).compact.map{ |f| "#{name}.#{f} "}
     end
 
-    # this method auto-completes values of fields that have a :complete_value marker 
+    # this method auto-completes values of fields that have a :complete_value marker
     def complete_value
       if last_token_is(COMPARISON_OPERATORS)
         token = tokens[tokens.size-2]
