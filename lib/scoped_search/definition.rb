@@ -241,7 +241,9 @@ module ScopedSearch
           @klass.scope(:search_for, lambda { |*args|
             find_options = ScopedSearch::QueryBuilder.build_query(self, args[0], args[1])
             search_scope = @klass.scoped
-            search_scope = search_scope.where(find_options[:conditions]) if find_options[:conditions]
+            cond_array   = find_options[:conditions]
+            cond_array   = cond_array.first if cond_array && cond_array.is_a?(Array) && cond_array.count == 1 # dirty work-around to prevent "sanitize_array_condition too few arguments" exception
+            search_scope = search_scope.where(cond_array) if cond_array
             search_scope = search_scope.includes(find_options[:include]) if find_options[:include]
             search_scope = search_scope.joins(find_options[:joins]) if find_options[:joins]
             search_scope = search_scope.reorder(find_options[:order]) if find_options[:order]
